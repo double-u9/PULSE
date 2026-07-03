@@ -1,0 +1,393 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: ML Trading System API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: pipeline
+    description: ML pipeline operations
+  - name: results
+    description: Results and predictions
+  - name: config
+    description: Configuration management
+  - name: charts
+    description: Chart image operations
+  - name: logs
+    description: Log file operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /summary:
+    get:
+      operationId: getSummary
+      tags: [results]
+      summary: Get pipeline results summary
+      responses:
+        "200":
+          description: Summary data or no_results status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SummaryResponse"
+
+  /config:
+    get:
+      operationId: getConfig
+      tags: [config]
+      summary: Get config.yaml contents
+      responses:
+        "200":
+          description: Config as key-value object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfigResponse"
+    post:
+      operationId: saveConfig
+      tags: [config]
+      summary: Save config.yaml
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveConfigRequest"
+      responses:
+        "200":
+          description: Config saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SaveConfigResponse"
+
+  /charts:
+    get:
+      operationId: listCharts
+      tags: [charts]
+      summary: List available chart PNG files
+      responses:
+        "200":
+          description: List of chart filenames
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChartListResponse"
+
+  /logs:
+    get:
+      operationId: listLogs
+      tags: [logs]
+      summary: List available log files
+      responses:
+        "200":
+          description: List of log filenames
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LogListResponse"
+
+  /logs/{filename}:
+    get:
+      operationId: getLog
+      tags: [logs]
+      summary: Get log file contents
+      parameters:
+        - name: filename
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Log file content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LogContentResponse"
+
+  /prediction-history:
+    get:
+      operationId: getPredictionHistory
+      tags: [results]
+      summary: Get prediction history from CSV
+      responses:
+        "200":
+          description: Last 100 rows of prediction log
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PredictionHistoryResponse"
+
+  /run:
+    post:
+      operationId: startRun
+      tags: [pipeline]
+      summary: Start the ML pipeline (python main.py)
+      responses:
+        "200":
+          description: Run started
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunStartResponse"
+
+  /run/status:
+    get:
+      operationId: getRunStatus
+      tags: [pipeline]
+      summary: Poll run status
+      responses:
+        "200":
+          description: Current run status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunStatusResponse"
+
+  /predict/{ticker}:
+    get:
+      operationId: quickPredict
+      tags: [pipeline]
+      summary: Run quick prediction for a ticker
+      parameters:
+        - name: ticker
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Prediction result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuickPredictResponse"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    SummaryResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        run_time:
+          type: string
+        ticker:
+          type: string
+        best_model:
+          type: string
+        n_features:
+          type: integer
+        prediction_horizon:
+          type: integer
+        forecast_label:
+          type: string
+        models:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/ModelMetrics"
+        tomorrow:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/TomorrowPrediction"
+        ticker_ranking:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/TickerRankingEntry"
+        diagnostics:
+          type: object
+          additionalProperties: true
+      required:
+        - status
+
+    ModelMetrics:
+      type: object
+      properties:
+        accuracy:
+          type: number
+        auc:
+          type: number
+        sharpe:
+          type: number
+        win_rate_pct:
+          type: number
+        n_trades:
+          type: integer
+      required:
+        - accuracy
+        - auc
+
+    TomorrowPrediction:
+      type: object
+      properties:
+        direction:
+          type: string
+        confidence:
+          type: number
+        strength:
+          type: string
+      required:
+        - direction
+        - confidence
+        - strength
+
+    TickerRankingEntry:
+      type: object
+      properties:
+        rank:
+          type: integer
+        probability:
+          type: number
+        direction:
+          type: string
+        strength:
+          type: string
+      required:
+        - rank
+        - probability
+        - direction
+        - strength
+
+    ConfigResponse:
+      type: object
+      properties:
+        config:
+          type: object
+          additionalProperties: true
+        raw_yaml:
+          type: string
+      required:
+        - config
+        - raw_yaml
+
+    SaveConfigRequest:
+      type: object
+      properties:
+        raw_yaml:
+          type: string
+      required:
+        - raw_yaml
+
+    SaveConfigResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required:
+        - success
+        - message
+
+    ChartListResponse:
+      type: object
+      properties:
+        charts:
+          type: array
+          items:
+            type: string
+      required:
+        - charts
+
+    LogListResponse:
+      type: object
+      properties:
+        logs:
+          type: array
+          items:
+            type: string
+      required:
+        - logs
+
+    LogContentResponse:
+      type: object
+      properties:
+        filename:
+          type: string
+        content:
+          type: string
+      required:
+        - filename
+        - content
+
+    PredictionHistoryResponse:
+      type: object
+      properties:
+        rows:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        count:
+          type: integer
+      required:
+        - rows
+        - count
+
+    RunStartResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        already_running:
+          type: boolean
+      required:
+        - success
+        - message
+
+    RunStatusResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [running, completed, failed, idle]
+        return_code:
+          type: integer
+          nullable: true
+        log_tail:
+          type: string
+      required:
+        - status
+
+    QuickPredictResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        ticker:
+          type: string
+        predictions:
+          type: object
+          additionalProperties: true
+        error:
+          type: string
+          nullable: true
+      required:
+        - success
+        - ticker

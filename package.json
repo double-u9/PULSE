@@ -1,0 +1,22 @@
+{
+  "name": "pulse",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "packageManager": "pnpm@11.7.0",
+  "scripts": {
+    "dev": "pnpm --parallel --filter @pulse/api --filter @pulse/web dev",
+    "dev:api": "pnpm --filter @pulse/api dev",
+    "dev:web": "pnpm --filter @pulse/web dev",
+    "build": "pnpm run typecheck && pnpm --filter @pulse/web build && pnpm --filter @pulse/api build",
+    "start": "pnpm --filter @pulse/api start",
+    "typecheck": "tsc --build && pnpm --filter @pulse/api --filter @pulse/web --if-present run typecheck",
+    "codegen": "pnpm --filter @pulse/api-spec codegen",
+    "db:push": "pnpm --filter @pulse/db push",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "prettier": "^3.8.1",
+    "typescript": "~5.9.2"
+  }
+}

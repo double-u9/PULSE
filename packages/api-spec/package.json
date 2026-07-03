@@ -1,0 +1,11 @@
+{
+  "name": "@pulse/api-spec",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "codegen": "orval --config ./orval.config.ts && node ./scripts/fix-zod-index.mjs"
+  },
+  "devDependencies": {
+    "orval": "^8.5.2"
+  }
+}

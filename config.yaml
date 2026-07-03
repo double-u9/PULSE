@@ -1,0 +1,59 @@
+# config.yaml — Human-Editable Configuration Override File
+
+# ── Data ──────────────────────────────────────────────────────
+data:
+  ticker: "AAPL"
+  period: "10y"
+  train_ratio: 0.7
+  val_ratio:   0.15
+  seq_len:     50
+  primary_horizon_idx: 0
+  target_mode: "binary"
+  feature_selection_k: 60
+  purge_days:  5
+  tickers: [AAPL, MSFT, GOOGL, AMZN, NVDA]
+  cs_norm_method: "zscore"
+  align_method: "inner"
+
+# ── Model training ────────────────────────────────────────────
+model:
+  epochs:      80
+  batch_size:  64
+  lr:          0.0003
+  patience:    15
+  threshold:   0.5
+  lstm_hidden: 64
+  lstm_layers: 2
+  tf_d_model:  64
+  tf_nhead:    4
+  tf_layers:   2
+  tcn_channels: 32
+  tcn_levels:  4
+  n_walks:     8
+
+# ── Backtest / risk ───────────────────────────────────────────
+backtest:
+  commission_bps:       1
+  slippage_bps:         2
+  impact_coeff:         0.1
+  adv_shares:           10000000
+  trade_size_shares:    1000
+  confidence_threshold: 0
+  use_kelly:            true
+  kelly_fraction:       0.2
+  stop_loss_pct:        0.05
+  risk_free_annual:     0.05
+
+# ── Experiment flags ──────────────────────────────────────────
+experiment:
+  run_hpo:               false
+  hpo_trials:            20
+  deep_wf:               false
+  run_feature_selection: true
+  run_shap:              true
+  run_baseline:          true
+  use_multi_ticker:      false
+
+# ── Output paths ──────────────────────────────────────────────
+paths:
+  results_dir: "results"

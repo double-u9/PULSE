@@ -1,0 +1,196 @@
+{
+  "run_time": "2026-07-03 18:39",
+  "ticker": "AAPL",
+  "version": "v9",
+  "improvements_v9": [
+    "confidence_threshold_fixed_0.0",
+    "single_scaler_pipeline",
+    "deep_model_checkpoints_saved",
+    "model_sizes_halved_no_overfit",
+    "ma_crossover_baseline_included",
+    "regime_conditional_evaluation",
+    "purged_walk_forward",
+    "diagnostic_health_checks"
+  ],
+  "experiment": {
+    "run_hpo": false,
+    "deep_wf": false,
+    "hpo_trials": 20,
+    "multi_ticker": false
+  },
+  "n_features": 60,
+  "pos_weight": 0.8731428571428571,
+  "class_balance_pct_up": 53.38621139526367,
+  "confidence_threshold": 0,
+  "models": {
+    "XGBoost": {
+      "accuracy": 0.5024,
+      "auc": 0.5321,
+      "f1_up": 0.4046,
+      "brier": 0.2498,
+      "sharpe": -166.485,
+      "sortino": -166.882,
+      "max_dd_pct": -0.03,
+      "win_rate_pct": 50.0,
+      "total_ret_pct": -0.01,
+      "n_trades": 85,
+      "alpha": -0.0001
+    },
+    "LSTM": {
+      "accuracy": 0.5314,
+      "auc": 0.509,
+      "f1_up": 0.694,
+      "brier": 0.2495,
+      "sharpe": -65.731,
+      "sortino": -65.89,
+      "max_dd_pct": -0.05,
+      "win_rate_pct": 54.63,
+      "total_ret_pct": 0.09,
+      "n_trades": 206,
+      "alpha": 0.0008
+    },
+    "GRU": {
+      "accuracy": 0.4976,
+      "auc": 0.497,
+      "f1_up": 0.563,
+      "brier": 0.2519,
+      "sharpe": -13.365,
+      "sortino": -18.082,
+      "max_dd_pct": -0.24,
+      "win_rate_pct": 53.12,
+      "total_ret_pct": 0.15,
+      "n_trades": 130,
+      "alpha": 0.0009
+    },
+    "Transformer": {
+      "accuracy": 0.4879,
+      "auc": 0.4954,
+      "f1_up": 0.5656,
+      "brier": 0.2497,
+      "sharpe": -28.05,
+      "sortino": -36.278,
+      "max_dd_pct": -0.15,
+      "win_rate_pct": 50.0,
+      "total_ret_pct": -0.07,
+      "n_trades": 153,
+      "alpha": -0.0015
+    },
+    "TCN": {
+      "accuracy": 0.4831,
+      "auc": 0.4594,
+      "f1_up": 0.4677,
+      "brier": 0.2721,
+      "sharpe": -5.697,
+      "sortino": -10.588,
+      "max_dd_pct": -0.54,
+      "win_rate_pct": 48.86,
+      "total_ret_pct": 0.55,
+      "n_trades": 124,
+      "alpha": 0.0043
+    },
+    "Ensemble_Equal": {
+      "accuracy": 0.4928,
+      "auc": 0.4729,
+      "f1_up": 0.557,
+      "brier": 0.2521,
+      "sharpe": -28.266,
+      "sortino": -44.73,
+      "max_dd_pct": -0.17,
+      "win_rate_pct": 48.39,
+      "total_ret_pct": 0.04,
+      "n_trades": 165,
+      "alpha": -0.0
+    },
+    "Ensemble_AUC": {
+      "accuracy": 0.5169,
+      "auc": 0.4752,
+      "f1_up": 0.5652,
+      "brier": 0.252,
+      "sharpe": -29.617,
+      "sortino": -46.56,
+      "max_dd_pct": -0.16,
+      "win_rate_pct": 49.57,
+      "total_ret_pct": 0.05,
+      "n_trades": 161,
+      "alpha": 0.0
+    },
+    "Ensemble_Stack": {
+      "accuracy": 0.5266,
+      "auc": 0.5154,
+      "f1_up": 0.5812,
+      "brier": 0.2779,
+      "sharpe": -2.957,
+      "sortino": -4.366,
+      "max_dd_pct": -1.13,
+      "win_rate_pct": 50.82,
+      "total_ret_pct": 0.81,
+      "n_trades": 135,
+      "alpha": 0.0069
+    },
+    "Ensemble_Cal": {
+      "accuracy": 0.5314,
+      "auc": 0.4565,
+      "f1_up": 0.694,
+      "brier": 0.2546,
+      "sharpe": -3.788,
+      "sortino": -5.694,
+      "max_dd_pct": -0.61,
+      "win_rate_pct": 54.63,
+      "total_ret_pct": 1.04,
+      "n_trades": 206,
+      "alpha": 0.0092
+    },
+    "Baseline_MA": {
+      "accuracy": 0.4589,
+      "auc": 0.458,
+      "f1_up": 0.4815,
+      "brier": 0.5411,
+      "sharpe": -0.585,
+      "sortino": -0.804,
+      "max_dd_pct": -1.83,
+      "win_rate_pct": 55.66,
+      "total_ret_pct": 2.53,
+      "n_trades": 12,
+      "alpha": 0.0262
+    }
+  },
+  "best_model": "LSTM",
+  "prediction_horizon": 1,
+  "forecast_label": "TOMORROW",
+  "tomorrow": {
+    "XGBoost": {
+      "direction": "DOWN",
+      "confidence": 0.4621,
+      "strength": "WEAK"
+    },
+    "LSTM": {
+      "direction": "UP",
+      "confidence": 0.505,
+      "strength": "WEAK"
+    },
+    "GRU": {
+      "direction": "DOWN",
+      "confidence": 0.4431,
+      "strength": "WEAK"
+    },
+    "Transformer": {
+      "direction": "DOWN",
+      "confidence": 0.4994,
+      "strength": "WEAK"
+    },
+    "TCN": {
+      "direction": "DOWN",
+      "confidence": 0.4858,
+      "strength": "WEAK"
+    },
+    "Ensemble_Stack": {
+      "direction": "DOWN",
+      "confidence": 0.3162,
+      "strength": "MODERATE"
+    }
+  },
+  "ticker_ranking": {},
+  "diagnostics": {
+    "issues_found": 1
+  }
+}
